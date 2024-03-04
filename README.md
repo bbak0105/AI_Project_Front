@@ -4,7 +4,6 @@
 
 <br/>
 
-### 📌 Technology Used
 ### `Excel Upload`
 > ✏️ 엑셀 데이터를 분석하기 위하여, 사용자에게 엑셀 데이터를 받을 수 있는 페이지 입니다.
 
@@ -42,10 +41,8 @@ const onUploadFile = (e) => {
     });
 };
 ```
+---
 
-<br/>
-
-### 📌 Technology Used
 ### `Main Dashboard`
 > ✏️ 엑셀 파일이 업로드 되면, 가장 먼저 나오는 [메인보드](https://github.com/bbak0105/AI_Project_Front/blob/main/src/views/dashboard/Dashboard.js) 입니다.
 > getAnalysisList API가 플라스크에서 호출되어 기본적인 데이터들을 state에 담아놓습니다.
