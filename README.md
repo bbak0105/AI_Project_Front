@@ -5,6 +5,47 @@
 <br/>
 
 ### 📌 Technology Used
+### `Excel Upload`
+> ✏️ 엑셀 데이터를 분석하기 위하여, 사용자에게 엑셀 데이터를 받을 수 있는 페이지 입니다.
+
+```javascript
+const onUploadFile = (e) => {
+    if(!fileData) {
+        setIsShowAlert(true);
+        return;
+    }
+
+    setIsShowAlert(false);
+
+    const formData = new FormData();
+    formData.append('file', fileData);
+
+    axios({
+      baseURL: "http://127.0.0.1:5000",
+      url: '/uploadData',
+      method: 'POST',
+      data: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+    })
+    .then(response => {
+        if(response.data === "Uplaod Success!") {
+            const findingUser = localStorage.getItem("user");
+            const userCounting = localStorage.getItem(`${findingUser}_counting`)
+            localStorage.setItem(`${findingUser}_counting`, userCounting-1);
+            window.location.href = "/dashboard";
+        }
+    })
+    .catch(error => {
+        console.error(error);
+    });
+};
+```
+
+<br/>
+
+### 📌 Technology Used
 ### `Main Dashboard`
 > ✏️ 엑셀 파일이 업로드 되면, 가장 먼저 나오는 [메인보드](https://github.com/bbak0105/AI_Project_Front/blob/main/src/views/dashboard/Dashboard.js) 입니다.
 > getAnalysisList API가 플라스크에서 호출되어 기본적인 데이터들을 state에 담아놓습니다.
@@ -84,8 +125,7 @@ const Dashboard = Loadable(lazy(() => import('../views/dashboard/Dashboard')))
 const FileUploadBox = Loadable(lazy(() => import('../views/dashboard/FileUploadBox')))
 const Predictboard = Loadable(lazy(() => import('../views/dashboard/Predictboard')))
 const Shop = Loadable(lazy(() => import('../views/dashboard/Shop')))
-const Error = Loadable(lazy(() => import('../views/authentication/Error')));
-const Login = Loadable(lazy(() => import('../views/authentication/Login')));
+...
 ```
 <br/>
 
