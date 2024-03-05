@@ -279,6 +279,28 @@ workbook.xlsx
 
 ---
 
+### `Shop`
+> 사용자가 분석 가능 횟수를 구매하면, Lottie로 애니메이션이 보여집니다. <br/>
+> 간단히 localStorage에서 횟수를 차감하게끔 하였습니다.
+
+```javaScript
+ <Lottie 
+    animationData={confirm} 
+    style={{width: '80px'}}
+    loop={false}
+    onComplete={(e) => {
+        const findingUser = localStorage.getItem("user");
+        const userCounting = localStorage.getItem(`${findingUser}_counting`)
+        const targetCount = index === targetIndex ? product.count : 0
+        localStorage.setItem(`${findingUser}_counting`, Number(userCounting) + targetCount);  
+
+        setOpenLottie(false)
+        setOpenAlert(false)
+        setTargetIndex();
+    }}
+/>
+```
+
 ### `Pages`
 > ✏️ 페이지에 lazy를 적용하여 동적 import 적용
 
