@@ -2,6 +2,45 @@
 
 ### 📌 Development Environment
 
+### `Get PredictData`
+> 
+
+```javascript
+const validateAndAwakeAPI = () => {
+    const validate = isValidate();
+
+    if(!validate) return;
+
+    setIsLoading(true);
+
+    fetch("/getLSTMData", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        begInv: begInv,
+        minInv: minInv,
+        maxInv: maxInv,
+        costs: [cost1,cost2,cost3,cost4,cost5,cost6]
+      })
+    }).then(
+      res => res.json()
+    ).then(
+      data => {
+        data[0]['M1'] = Math.floor(data[0]['M1']).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        data[1]['M2'] = Math.floor(data[1]['M2']).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        ...
+        data[6]['target'] = Math.floor(data[6]['target']).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+        setPredictData(data);
+      }
+    ).finally(() => {
+      setIsLoading(false);
+    })
+  }
+```
+
 <br/>
 
 ### `Excel Upload`
