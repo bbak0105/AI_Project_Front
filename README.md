@@ -1,50 +1,13 @@
 # [서강대학원] 프랙티컴 AI 재고관리 수요예측 프로젝트 프론트
 
-### 📌 Development Environment
+## 📌 Development Environment
 
-### `Get PredictData`
-> 
-
-```javascript
-const validateAndAwakeAPI = () => {
-    const validate = isValidate();
-
-    if(!validate) return;
-
-    setIsLoading(true);
-
-    fetch("/getLSTMData", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        begInv: begInv,
-        minInv: minInv,
-        maxInv: maxInv,
-        costs: [cost1,cost2,cost3,cost4,cost5,cost6]
-      })
-    }).then(
-      res => res.json()
-    ).then(
-      data => {
-        data[0]['M1'] = Math.floor(data[0]['M1']).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        data[1]['M2'] = Math.floor(data[1]['M2']).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        ...
-        data[6]['target'] = Math.floor(data[6]['target']).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
-        setPredictData(data);
-      }
-    ).finally(() => {
-      setIsLoading(false);
-    })
-  }
-```
-
-<br/>
+## 📌 Frontend Flow
 
 ### `Excel Upload`
-> ✏️ 엑셀 데이터를 분석하기 위하여, 사용자에게 엑셀 데이터를 받을 수 있는 페이지 입니다.
+> ✏️ 엑셀 데이터를 분석하기 위하여, 사용자에게 엑셀 데이터를 받을 수 있는 페이지 입니다. <br/>
+> 데이터가 정상적으로 업로드 되면, 플라스크 서버에 axios로 파일 데이터를 보냅니다. 헤더는 multipart로 설정합니다. <br/>
+> 정상적으로 보내지면, localStorage에 저장된 분석 가능 횟수를 차감합니다.
 
 ```javascript
 const onUploadFile = (e) => {
@@ -80,11 +43,13 @@ const onUploadFile = (e) => {
     });
 };
 ```
+[↑ 전체코드보기](https://github.com/bbak0105/AI_Project_Front/blob/main/src/views/dashboard/FileUploadBox.js)
+
 ---
 
 ### `Main Dashboard`
-> ✏️ 엑셀 파일이 업로드 되면, 가장 먼저 나오는 [메인보드](https://github.com/bbak0105/AI_Project_Front/blob/main/src/views/dashboard/Dashboard.js) 입니다.
-> getAnalysisList API가 플라스크에서 호출되어 기본적인 데이터들을 state에 담아놓습니다.
+> ✏️ 엑셀 파일이 업로드 되면, 가장 먼저 나오는 메인보드 입니다. <br/>
+> getAnalysisList API가 호출되어 플라스크에서 분석된 데이터들을 state에 담아놓습니다. <br/>
 > 해당 데이터들은 자식 컴포넌트인 `<SalesOverview/>` 에서 'react-apexcharts'를 통해 차트로 뿌려집니다.
 
 ```javascript
@@ -150,11 +115,172 @@ useEffect(() => {
     .finally(() => setSalesOverviewLoading(false))
   },[salesOverviewLoading]);
 ```
+[↑ 전체코드보기](https://github.com/bbak0105/AI_Project_Front/blob/main/src/views/dashboard/Dashboard.js)
+
+---
+
+### `Stock Form`
+> ✏️ 적정 재고량을 파악하기 위해, 기존에 있는 재고들을 폼에 담아 보내줄 화면입니다.
+
+
+---
+### `Get PredictData`
+> ✏️ LSTM 예측 데이터를 가져오기 위해 getLSTMData API를 호출합니다. 호출 직전에 유효성 검사도 진행합니다. <br/>
+> fetch를 사용하여 POST 방식으로 총 4개의 데이터를 JSON으로 보내고, 받아온 비동기 데이터가 준비되면 state에 넣어줍니다. <br/>
+> 모든 작업이 끝나면, finally로 로딩창을 닫아줍니다.
+
+```javascript
+const validateAndAwakeAPI = () => {
+    const validate = isValidate();
+
+    if(!validate) return;
+
+    setIsLoading(true);
+
+    fetch("/getLSTMData", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        begInv: begInv,
+        minInv: minInv,
+        maxInv: maxInv,
+        costs: [cost1,cost2,cost3,cost4,cost5,cost6]
+      })
+    }).then(
+      res => res.json()
+    ).then(
+      data => {
+        data[0]['M1'] = Math.floor(data[0]['M1']).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        data[1]['M2'] = Math.floor(data[1]['M2']).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        ...
+        data[6]['target'] = Math.floor(data[6]['target']).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+        setPredictData(data);
+      }
+    ).finally(() => {
+      setIsLoading(false);
+    })
+  }
+```
+<br/>
+
+### Data-To-Excel
+> ✏️ 예측한 데이터를 엑셀로 변환하여 다운로드 받을 수 있도록 합니다.
+> 비정상적 접근에 대해 방어코드를 설정하고, exceljs를 사용하여 엑셀 데이터를 만듭니다.
+> CSS 설정 후에 다운로드가 가능하게끔 anchor를 활용하여 엑셀 다운로드를 진행합니다.
+
+```javascript
+const _EXCEL = require("exceljs");
+
+if(!excelData) {
+  alert("[ExcelDownload]. 비정상적 접근입니다.");
+  return;
+}
+
+const workbook = new _EXCEL.Workbook();
+workbook.creator = localStorage.getItem('user');
+workbook.created = new Date();
+workbook.modified = new Date(); 
+
+const excelSheet = workbook.addWorksheet("Product_CODE1359's Predict Data");
+const excelColumns = [];
+
+/* Input Data */
+excelColumns.push({ header: "기초재고", key: "begInv", width: 15 });
+...
+
+/* Output Data */
+excelColumns.push({ header: "M1_적정재고량", key: "M1", width: 20 });
+...
+
+/* Colum Setting */
+excelSheet.columns = excelColumns;
+
+/* Excel Data Setting */
+for(let i=0; i<excelData.length; i++) {
+  const targetExcelData = excelData[i];
+  excelSheet.addRow(targetExcelData);
+}
+
+for(let i=0; i<excelData.length+1; i++) {
+  excelSheet.columns.forEach((columnItem, columnIndex) => {
+    /* 테두리 설정 */
+    excelSheet.getRow(i+1).getCell(columnIndex + 1).border = {
+        top: { style: "thin" },
+        left: { style: "thin" },
+        right: { style: "thin" },
+        bottom: { style: "thin" },
+    };
+
+    /* 첫 행(컬럼) 스타일 설정 */
+    if (i === 0) {
+        /* 색상 및 스타일 설정 */
+        const whiteColorColumns = [1,2,3,4,5,6,7,8,9];
+
+        if (whiteColorColumns.includes(columnIndex + 1)) {
+            excelSheet.getRow(1).getCell(columnIndex + 1).fill = {
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: "FFFFFF" },
+                bgColor: { argb: "FFFFFF" },
+            };
+        } else {
+            excelSheet.getRow(1).getCell(columnIndex + 1).fill = {
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: "CCCCCC" },
+                bgColor: { argb: "CCCCCC" },
+            };
+        }
+
+        /* 정렬 */
+        excelSheet.getRow(1).getCell(columnIndex + 1).alignment = {
+            vertical: "middle",
+            horizontal: "center",
+            wrapText: true
+        };
+
+        /* 첫 행 폰트 굵게 */
+        excelSheet.getRow(1).font = {
+            bold: true
+        };
+
+        /* 첫 행 높이 넓게 */
+        excelSheet.getRow(1).height = 40;
+      } else {
+        /* 정렬 */
+        excelSheet.getRow(i + 1).getCell(columnIndex + 1).alignment = {
+            vertical: "center",
+            horizontal: "center",
+        };
+    }
+  });
+}
+
+/* Excel 파일 다운로드 */
+workbook.xlsx
+  .writeBuffer()
+  .then((data) => {
+      const blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      const url = window.URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `Product_CODE1359's Predict Data.xlsx`;
+      anchor.click();
+      window.URL.revokeObjectURL(url);
+  })
+  .catch((error) => {
+      alert("엑셀 다운로드 오류!");
+  });           
+```
+[↑ 전체코드보기](https://github.com/bbak0105/AI_Project_Front/blob/main/src/views/dashboard/Predictboard.js)
 
 ---
 
 ### `Pages`
-> ✏️ [페이지에 lazy를 적용](https://github.com/bbak0105/AI_Project_Front/blob/main/src/routes/Router.js)하여 동적 import 적용
+> ✏️ 페이지에 lazy를 적용하여 동적 import 적용
 
 ```javascript
 const Dashboard = Loadable(lazy(() => import('../views/dashboard/Dashboard')))
@@ -165,7 +291,7 @@ const Shop = Loadable(lazy(() => import('../views/dashboard/Shop')))
 ```
 <br/>
 
-> ✏️ 각 기능에 맞는 [라우터](https://github.com/bbak0105/AI_Project_Front/blob/main/src/routes/Router.js) 이름 지정
+> ✏️ 각 기능에 맞는 라우터 이름 지정
 
 ```javascript
 const Router = [
@@ -192,4 +318,4 @@ const Router = [
   },
 ];
 ```
-<br/>
+[↑ 전체코드보기](https://github.com/bbak0105/AI_Project_Front/blob/main/src/routes/Router.js)
