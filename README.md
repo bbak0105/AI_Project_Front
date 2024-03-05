@@ -166,7 +166,7 @@ const validateAndAwakeAPI = () => {
 ```
 <br/>
 
-### Data-To-Excel
+### `Data-To-Excel`
 > ✏️ 예측한 데이터를 엑셀로 변환하여 다운로드 받을 수 있도록 합니다.
 > 비정상적 접근에 대해 방어코드를 설정하고, exceljs를 사용하여 엑셀 데이터를 만듭니다.
 > CSS 설정 후에 다운로드가 가능하게끔 anchor를 활용하여 엑셀 다운로드를 진행합니다.
@@ -300,6 +300,9 @@ workbook.xlsx
     }}
 />
 ```
+[↑ 전체코드보기](https://github.com/bbak0105/AI_Project_Front/blob/main/src/views/dashboard/Shop.js)
+
+---
 
 ### `Pages`
 > ✏️ 페이지에 lazy를 적용하여 동적 import 적용
