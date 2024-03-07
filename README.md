@@ -119,6 +119,126 @@ useEffect(() => {
 
 ---
 
+### `Chart & Grid`
+> ✏️ 메인보드 데이터의 자식 컴포넌트 입니다. 메인보드에서 뿌려주는 데이터를 토대로 차트와 그리드를 생성합니다. <br/>
+> 차트는 `react-apexcharts`, 그리드는 `ag-grid-react` 라이브러리를 사용하였습니다.
+
+```javaScript
+// props
+const gridDataProductCategoryBasedJSON = props.gridDataProductCategoryBasedJSON;
+const gridDataWarehouseBasedJSON = props.gridDataWarehouseBasedJSON;
+...
+
+// Chart Color
+const theme = useTheme();
+const primary = theme.palette.primary.main;
+...
+
+// Chart Setting
+// [1]. chart Options
+const warehouseOptions = {
+    chart: {
+        type: 'bar',
+        fontFamily: "'Plus Jakarta Sans', sans-serif;",
+        foreColor: '#adb0bb',
+        toolbar: {
+            show: true,
+        },
+        height: 300,
+    },
+    plotOptions: {
+        bar: {
+            horizontal: false,
+            barHeight: '60%',
+            columnWidth: '42%',
+            borderRadius: [6],
+            borderRadiusApplication: 'end',
+            borderRadiusWhenStacked: 'all',
+        },
+    },
+    stroke: {
+        show: true,
+        width: 5,
+        lineCap: "butt",
+        colors: ["transparent"],
+    },
+    dataLabels: { enabled: false },
+    legend: { show: false },
+    colors: [secondary, theme.palette.secondary.light],
+    yaxis: { tickAmount: 4 },
+    grid: {
+        borderColor: 'rgba(0,0,0,0.1)',
+        strokeDashArray: 3,
+        xaxis: {
+            lines: {
+                show: false,
+            },
+        },
+    },
+    xaxis: {
+        categories: analysisList  && analysisList.warehouseJSON? analysisList.warehouseJSON.index : [],
+        axisBorder: { show: false },
+    },
+    tooltip: {
+        theme: theme.palette.mode === 'dark' ? 'dark' : 'light',
+        fillSeriesColor: false,
+    }
+};
+...
+
+// [2]. chart series
+const warehouseChartSeries = [
+    {
+        name: 'Count',
+        data: analysisList && analysisList.warehouseJSON ? analysisList.warehouseJSON.count : []
+    }
+];
+...
+
+// [3]. Grid Setting
+const [columnProductCategoryDefs] = React.useState([
+    { field: 'ProductCategory', rowGroup: true, hide: true, resizable: true },
+    { field: 'Warehouse', sortable: true, filter: true, resizable: true },
+    { field: 'OrderDemand', sortable: true, filter: true, resizable: true },
+]);
+...
+
+return (
+    <>
+        ...
+        {/* [react-apexcharts] Warehouse Chart */}
+        <DashboardCard title="Warehouse Overview">
+            { analysisList ?
+                (
+                    <Chart
+                        options={warehouseOptions}
+                        series={warehouseChartSeries}
+                        type="bar"
+                        height="300px"
+                    />
+                ) : ( <></> )
+            }
+        </DashboardCard>
+        ...
+        {/* [ag-grid-react] Product Category Grid */}
+        <DashboardCard title="Product Category Grouping Data">
+            <div className="ag-theme-alpine" style={{ width: '100%', height: 500, margin: '0 auto' }}>
+                <AgGridReact
+                    rowData={gridDataProductCategoryBasedJSON}
+                    columnDefs={columnProductCategoryDefs}
+                    defaultColDef={{ flex: 1 }}
+                >
+                </AgGridReact>
+            </div>
+        </DashboardCard>
+        ...
+    </>
+)
+```
+[↑ 전체코드보기](https://github.com/bbak0105/AI_Project_Front/blob/main/src/views/dashboard/components/SalesOverview.js)
+
+---
+
 ### `Stock Form`
 > ✏️ 적정 재고량을 파악하기 위해, 기존에 있는 재고들을 폼에 담아 보내줄 화면입니다.
 
