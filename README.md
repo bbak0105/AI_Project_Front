@@ -1,9 +1,31 @@
 # [서강대학원] 프랙티컴 AI 재고관리 수요예측 프로젝트 프론트
+![DataNomads](https://github.com/bbak0105/AI_Project_Front/assets/66405572/1d1423ee-e0a9-4a93-8072-aee69b1b261b)
 
-## 📌 Development Environment
+<br/>
+
+## 📌 Frontend Skills
+### Language
+<a><img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white"/></a>
+
+### Library
+<a><img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB"/></a>
+<a><img src="https://img.shields.io/badge/Material--UI-0081CB?style=for-the-badge&logo=material-ui&logoColor=white"/></a>
+<a><img src="https://img.shields.io/badge/ApexChart-33FFFF?style=for-the-badge&logo=material-ui&logoColor=white"/></a>
+<a><img src="https://img.shields.io/badge/AgGrid-FF0000?style=for-the-badge&logo=material-ui&logoColor=white"/></a>
+<a><img src="https://img.shields.io/badge/ExcelJS-217346?style=for-the-badge&logo=microsoft-excel&logoColor=white"/></a>
+
+### IDE
+<a><img src="https://img.shields.io/badge/Visual_Studio_Code-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=white"/></a>
+
+### Skills
+<a><img src="https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white"/></a>
+<a><img src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white"/></a>
+<a><img src="https://img.shields.io/badge/CSS-239120?&style=for-the-badge&logo=css3&logoColor=white"/></a>
+<a><img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"/></a>
+
+<br/>
 
 ## 📌 Frontend Flow
-
 ### `Excel Upload`
 > ✏️ 엑셀 데이터를 분석하기 위하여, 사용자에게 엑셀 데이터를 받을 수 있는 페이지 입니다. <br/>
 > 데이터가 정상적으로 업로드 되면, 플라스크 서버에 axios로 파일 데이터를 보냅니다. 헤더는 multipart로 설정합니다. <br/>
