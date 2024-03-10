@@ -26,6 +26,7 @@
 <br/>
 
 ## 📌 Frontend Flow
+
 ### `Excel Upload`
 > ✏️ 엑셀 데이터를 분석하기 위하여, 사용자에게 엑셀 데이터를 받을 수 있는 페이지 입니다. <br/>
 > 데이터가 정상적으로 업로드 되면, 플라스크 서버에 axios로 파일 데이터를 보냅니다. 헤더는 multipart로 설정합니다. <br/>
@@ -66,6 +67,11 @@ const onUploadFile = (e) => {
 };
 ```
 [↑ 전체코드보기](https://github.com/bbak0105/AI_Project_Front/blob/main/src/views/dashboard/FileUploadBox.js)
+
+<br/>
+
+> 캡쳐본
+<img width="953" alt="스크린샷 2024-03-10 오후 11 25 24" src="https://github.com/bbak0105/AI_Project_Front/assets/66405572/717b8bfc-8a0c-48a5-88ab-f46c6f0254f6">
 
 ---
 
@@ -138,6 +144,11 @@ useEffect(() => {
   },[salesOverviewLoading]);
 ```
 [↑ 전체코드보기](https://github.com/bbak0105/AI_Project_Front/blob/main/src/views/dashboard/Dashboard.js)
+
+<br/>
+
+> 캡쳐본
+<img width="953" alt="스크린샷 2024-03-10 오후 11 26 55" src="https://github.com/bbak0105/AI_Project_Front/assets/66405572/e326f72e-351c-4202-af13-ec570cabde00">
 
 ---
 
@@ -259,13 +270,20 @@ return (
 ```
 [↑ 전체코드보기](https://github.com/bbak0105/AI_Project_Front/blob/main/src/views/dashboard/components/SalesOverview.js)
 
+<br/>
+
+> 캡쳐본
+<img width="953" alt="스크린샷 2024-03-10 오후 11 27 40" src="https://github.com/bbak0105/AI_Project_Front/assets/66405572/a34f1996-adc7-4679-907e-45cb670c66f5">
+
 ---
 
 ### `Stock Form`
 > ✏️ 적정 재고량을 파악하기 위해, 기존에 있는 재고들을 폼에 담아 보내줄 화면입니다.
 
+<img width="950" alt="스크린샷 2024-03-10 오후 11 28 32" src="https://github.com/bbak0105/AI_Project_Front/assets/66405572/2f777166-7bab-4b8c-af4d-cc32e5ea1e27">
 
 ---
+
 ### `Get PredictData`
 > ✏️ LSTM 예측 데이터를 가져오기 위해 getLSTMData API를 호출합니다. 호출 직전에 유효성 검사도 진행합니다. <br/>
 > fetch를 사용하여 POST 방식으로 총 4개의 데이터를 JSON으로 보내고, 받아온 비동기 데이터가 준비되면 state에 넣어줍니다. <br/>
@@ -306,11 +324,19 @@ const validateAndAwakeAPI = () => {
     })
   }
 ```
+
+[↑ 전체코드보기](https://github.com/bbak0105/AI_Project_Front/blob/main/src/views/dashboard/Predictboard.js)
+
 <br/>
 
+> 캡쳐본
+<img width="953" alt="스크린샷 2024-03-10 오후 11 28 51" src="https://github.com/bbak0105/AI_Project_Front/assets/66405572/c3ca1139-93cb-4689-8962-d96809a0935b">
+
+---
+
 ### `Data-To-Excel`
-> ✏️ 예측한 데이터를 엑셀로 변환하여 다운로드 받을 수 있도록 합니다.
-> 비정상적 접근에 대해 방어코드를 설정하고, exceljs를 사용하여 엑셀 데이터를 만듭니다.
+> ✏️ 예측한 데이터를 엑셀로 변환하여 다운로드 받을 수 있도록 합니다. <br/>
+> 비정상적 접근에 대해 방어코드를 설정하고, exceljs를 사용하여 엑셀 데이터를 만듭니다. <br/>
 > CSS 설정 후에 다운로드가 가능하게끔 anchor를 활용하여 엑셀 다운로드를 진행합니다.
 
 ```javascript
@@ -419,6 +445,11 @@ workbook.xlsx
 ```
 [↑ 전체코드보기](https://github.com/bbak0105/AI_Project_Front/blob/main/src/views/dashboard/Predictboard.js)
 
+<br/>
+
+> 캡쳐본
+<img width="954" alt="스크린샷 2024-03-10 오후 11 29 50" src="https://github.com/bbak0105/AI_Project_Front/assets/66405572/3cb021e3-5e53-45ae-993c-4e2a0fa062e3">
+
 ---
 
 ### `Shop`
@@ -443,6 +474,11 @@ workbook.xlsx
 />
 ```
 [↑ 전체코드보기](https://github.com/bbak0105/AI_Project_Front/blob/main/src/views/dashboard/Shop.js)
+
+<br/>
+
+> 캡쳐본
+<img width="956" alt="스크린샷 2024-03-10 오후 11 30 14" src="https://github.com/bbak0105/AI_Project_Front/assets/66405572/25de0340-469e-4e06-94d6-920911581e30">
 
 ---
 
